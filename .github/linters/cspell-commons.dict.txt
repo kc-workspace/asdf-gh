@@ -1,0 +1,8 @@
+tmppath
+tmpdir
+itdir
+itpath
+dldir
+dlpath
+aarch
+armv

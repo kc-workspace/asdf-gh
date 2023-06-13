@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+## Determine the latest stable version of a tool.
+## https://asdf-vm.com/plugins/create.html#bin-latest-stable
+
+set -euo pipefail
+
+export ASDF_PLUGIN_SCRIPT=${BASH_SOURCE[0]}
+export ASDF_PLUGIN_PATH
+ASDF_PLUGIN_PATH=$(dirname "$(dirname "$ASDF_PLUGIN_SCRIPT")")
+
+# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
+source "${ASDF_PLUGIN_PATH:?}/lib/commands.sh"
+
+## -----------------------------------------------------------------------
+
+_asdf_query_latest "$1"

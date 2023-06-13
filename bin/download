@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+## Download the source code or binary for a specific version of a tool
+## to a specified location.
+## https://asdf-vm.com/plugins/create.html#bin-download
+
+set -euo pipefail
+
+export ASDF_PLUGIN_SCRIPT=${BASH_SOURCE[0]}
+export ASDF_PLUGIN_PATH
+ASDF_PLUGIN_PATH=$(dirname "$(dirname "$ASDF_PLUGIN_SCRIPT")")
+
+# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
+source "${ASDF_PLUGIN_PATH:?}/lib/commands.sh"
+
+## -----------------------------------------------------------------------
+
+## Override post download behavior
+# asdf_post_download() {
+#   local tmppath="$1" outpath="$2"
+# }
+
+asdf_download "$ASDF_INSTALL_VERSION" "$ASDF_DOWNLOAD_PATH"
+
+unset TEMP_DIRECTORY

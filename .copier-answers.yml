@@ -1,0 +1,15 @@
+---
+## Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v1.3.0-4-g3ff0d0e
+_src_path: .
+app_download_link: https://github.com/cli/cli/releases/download/v${version}/gh_${version}_${os}_${arch}.$(asdf_get_download_ext)
+app_git_repo: https://github.com/cli/cli
+app_name: gh
+app_strip_component: 0
+git_remote: https://github.com/kc-workspace/asdf-gh.git
+plugin_author: Kamontat Chantrachirathumrong
+plugin_name: asdf-gh
+plugin_org: kc-workspace
+setting_os_mapper_darwin: macOS
+setting_os_mapper_linux: linux
+settings_os_mapper_enabled: true

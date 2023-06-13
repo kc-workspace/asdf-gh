@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+## Output a list of links relevant to the plugin and tool.
+## One link per line.
+## https://asdf-vm.com/plugins/create.html#bin-help-links
+
+set -euo pipefail
+
+export ASDF_PLUGIN_SCRIPT=${BASH_SOURCE[0]}
+export ASDF_PLUGIN_PATH
+ASDF_PLUGIN_PATH=$(dirname "$(dirname "$ASDF_PLUGIN_SCRIPT")")
+
+# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
+source "${ASDF_PLUGIN_PATH:?}/lib/commands.sh"
+
+## -----------------------------------------------------------------------
+
+printf "%-12s : %s\n" \
+  "Application" "$ASDF_PLUGIN_APP_REPO"
+printf "%-12s : %s\n" \
+  "Plugin" "$ASDF_PLUGIN_REPO"

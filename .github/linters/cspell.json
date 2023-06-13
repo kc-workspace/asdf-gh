@@ -1,0 +1,32 @@
+// https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell#example-cspelljson-file
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "language": "en",
+  "allowCompoundWords": true,
+  "ignorePaths": [
+    // Ignore cspell config
+    "**/.cspell.json",
+    // Ignore vscode config
+    "**/.vscode",
+    // Ignore auto-generate scripts
+    "**/scripts"
+  ],
+  "dictionaries": [
+    "softwareTerms",
+    "bash",
+    "filetypes",
+    "customCommons",
+    "customApps",
+    "customSoftwares",
+    "customNames"
+  ],
+  "dictionaryDefinitions": [
+    { "name": "customCommons", "path": "./cspell-commons.dict.txt" },
+    { "name": "customApps", "path": "./cspell-apps.dict.txt" },
+    { "name": "customSoftwares", "path": "./cspell-softwares.dict.txt" },
+    { "name": "customNames", "path": "./cspell-names.dict.txt" }
+  ],
+  "useGitignore": true,
+  "gitignoreRoot": "../.."
+}

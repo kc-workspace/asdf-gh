@@ -1,0 +1,65 @@
+name: Main
+
+on:
+  push:
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DEFAULT_BRANCH: main
+
+jobs:
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Running cspell
+        uses: streetsidesoftware/cspell-action@v2
+        with:
+          config: ".github/linters/cspell.json"
+          # Log progress and other information during the action execution.
+          verbose: true
+          # Determines if the action should be failed
+          # if any spelling issues are found.
+          strict: true
+          # Limit the files checked to the ones in the pull request or push.
+          # We will enabled this only if this job tooks more than 3 minutes
+          incremental_files_only: false
+          # Notification level to use with inline reporting of spelling errors.
+          # Allowed values are: warning, error, none
+          inline: warning
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Linting
+        # https://github.com/github/super-linter#slim-image
+        uses: github/super-linter/slim@v5
+        env:
+          DEFAULT_BRANCH: ${{ env.DEFAULT_BRANCH }}
+          VALIDATE_ALL_CODEBASE: false
+          IGNORE_GITIGNORED_FILES: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  testing:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: asdf_plugin_test
+        uses: asdf-vm/actions/plugin-test@v2
+        with:
+          command: gh
