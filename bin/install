@@ -14,4 +14,7 @@ source "${ASDF_PLUGIN_PATH:?}/lib/commands.sh"
 
 ## -----------------------------------------------------------------------
 
-asdf_install "$ASDF_DOWNLOAD_PATH" "$ASDF_INSTALL_PATH"
+asdf_install \
+  "$ASDF_INSTALL_VERSION" \
+  "$ASDF_DOWNLOAD_PATH" \
+  "$ASDF_INSTALL_PATH"

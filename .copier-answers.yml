@@ -1,11 +1,13 @@
 ---
 ## Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v1.3.0-4-g3ff0d0e
-_src_path: .
+_commit: v1.3.1
+_src_path: gh:kc-workspace/asdf-plugin-template.git
+app_download_file: gh
 app_download_link: https://github.com/cli/cli/releases/download/v${version}/gh_${version}_${os}_${arch}.$(asdf_get_download_ext)
+app_download_type: directory
 app_git_repo: https://github.com/cli/cli
 app_name: gh
-app_strip_component: 0
+app_strip_component: 1
 git_remote: https://github.com/kc-workspace/asdf-gh.git
 plugin_author: Kamontat Chantrachirathumrong
 plugin_name: asdf-gh
