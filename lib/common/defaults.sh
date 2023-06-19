@@ -225,10 +225,10 @@ kc_asdf_template() {
 ##   - ASDF_INSTALL_TYPE - set by asdf core
 kc_asdf_install_not_support() {
   for t in "$@"; do
-  if [[ "$t" == "${ASDF_INSTALL_TYPE:?}" ]]; then
-    kc_asdf_throw 7 "your install type (%s) is not supported by plugins" \
-      "$t"
-  fi
+    if [[ "$t" == "${ASDF_INSTALL_TYPE:?}" ]]; then
+      kc_asdf_throw 7 "your install type (%s) is not supported by plugins" \
+        "$t"
+    fi
   done
 }
 

@@ -61,7 +61,6 @@ __asdf_bin_download() {
   else
     kc_asdf_info "you are downloading with insecure mode"
   fi
-  
 
   local outdir="${ASDF_DOWNLOAD_PATH:?}"
   local outpath
