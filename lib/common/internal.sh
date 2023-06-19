@@ -35,7 +35,7 @@ __asdf_bin_download() {
       kc_asdf_template "${KC_ASDF_CHECKSUM_URL:?}" "${tmpl_variables[@]}"
     )"
 
-    kc_asdf_step_start "checksum" "sha256sum %s" \
+    kc_asdf_step_start "checksum" "256 %s" \
       "$checksum_url"
     kc_asdf_debug "checksum output: %s" "$tmpdir/$checksum_tmpfile"
     kc_asdf_fetch_file "$checksum_url" "$tmpdir/$checksum_tmpfile"
@@ -174,7 +174,7 @@ __asdf_bin_help-overview() {
 __asdf_bin_help-deps() {
   kcs_asdf_help_header "Dependencies"
   local deps=(git curl sed grep mktemp xargs)
-  deps+=(sha256sum)
+  deps+=(256)
   for dep in "${deps[@]}"; do
     kc_asdf_printf "$dep"
   done

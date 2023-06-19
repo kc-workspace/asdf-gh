@@ -330,7 +330,10 @@ kc_asdf_checksum() {
   dir="$(dirname "$input")"
   file="$(basename "$input")"
 
-  local cmd="sha256sum"
+  local bit="256"
+  local cmd="sha${bit}sum"
+  command -v "$cmd" >/dev/null ||
+    cmd="shasum"
 
   kc_asdf_debug "exec: %s --check %s (%s)" \
     "$cmd" "$file" "$dir"
