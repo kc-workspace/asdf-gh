@@ -9,3 +9,10 @@ outfile
 outpath
 aarch
 armv
+checksum
+shasum
+sha1sum
+sha224sum
+sha256sum
+sha384sum
+sha512sum
