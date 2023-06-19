@@ -28,7 +28,7 @@
   <a href="https://asdf-vm.com">ASDF</a>
 </h3>
 
-> This is an asdf-vm plugin generated from [template](template-gh).
+> This is an asdf-vm plugin generated from [template][template-gh].
 
 ## Before start
 
