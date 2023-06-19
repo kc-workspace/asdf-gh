@@ -4,21 +4,20 @@
 ## One dependency per line.
 ## https://asdf-vm.com/plugins/create.html#bin-help-deps
 
-set -euo pipefail
-
-export ASDF_PLUGIN_SCRIPT=${BASH_SOURCE[0]}
-export ASDF_PLUGIN_PATH
-ASDF_PLUGIN_PATH=$(dirname "$(dirname "$ASDF_PLUGIN_SCRIPT")")
-
-# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
-source "${ASDF_PLUGIN_PATH:?}/lib/commands.sh"
+## Your script specific code
+# kc_asdf_main() {
+#   return 0
+# }
 
 ## -----------------------------------------------------------------------
 
-deps=(git curl sed)
+set -euo pipefail
 
-for dep in "${deps[@]}"; do
-  printf "%s\n" "$dep"
-done
+export KC_ASDF_PLUGIN_ENTRY_PATH=${BASH_SOURCE[0]}
+export KC_ASDF_PLUGIN_ENTRY_NAME
+KC_ASDF_PLUGIN_ENTRY_NAME="$(basename "$KC_ASDF_PLUGIN_ENTRY_PATH")"
+export KC_ASDF_PLUGIN_PATH
+KC_ASDF_PLUGIN_PATH=$(dirname "$(dirname "$KC_ASDF_PLUGIN_ENTRY_PATH")")
 
-unset deps
+# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
+source "$KC_ASDF_PLUGIN_PATH/lib/commands.sh" "$@"

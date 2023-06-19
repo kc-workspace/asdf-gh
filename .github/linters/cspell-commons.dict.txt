@@ -1,8 +1,11 @@
-tmppath
 tmpdir
-itdir
-itpath
-dldir
-dlpath
+tmpfile
+tmppath
+indir
+infile
+inpath
+outdir
+outfile
+outpath
 aarch
 armv

@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-asdf_get_download_ext() {
-  local os=""
-  os="$(asdf_get_os)"
+## User utility functions
+## This will load on very beginning of the scripts
+## so make sure that you only define functions
 
-  if [[ "$os" == "macOS" ]]; then
+download_extension() {
+  if [[ "$KC_ASDF_OS" == "macOS" ]]; then
     printf "zip"
   else
     printf "tar.gz"

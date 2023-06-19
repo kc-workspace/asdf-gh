@@ -3,15 +3,26 @@
 ## Determine the latest stable version of a tool.
 ## https://asdf-vm.com/plugins/create.html#bin-latest-stable
 
-set -euo pipefail
+## Your script specific code
+# kc_asdf_main() {
+#   return 0
+# }
 
-export ASDF_PLUGIN_SCRIPT=${BASH_SOURCE[0]}
-export ASDF_PLUGIN_PATH
-ASDF_PLUGIN_PATH=$(dirname "$(dirname "$ASDF_PLUGIN_SCRIPT")")
-
-# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
-source "${ASDF_PLUGIN_PATH:?}/lib/commands.sh"
+## To filter latest version out
+# _kc_asdf_latest_filter() {
+#   local tmpfile="$1" query="$2"
+#   kc_asdf_tags_only "$tmpfile" "$query"
+# }
 
 ## -----------------------------------------------------------------------
 
-_asdf_query_latest "$1"
+set -euo pipefail
+
+export KC_ASDF_PLUGIN_ENTRY_PATH=${BASH_SOURCE[0]}
+export KC_ASDF_PLUGIN_ENTRY_NAME
+KC_ASDF_PLUGIN_ENTRY_NAME="$(basename "$KC_ASDF_PLUGIN_ENTRY_PATH")"
+export KC_ASDF_PLUGIN_PATH
+KC_ASDF_PLUGIN_PATH=$(dirname "$(dirname "$KC_ASDF_PLUGIN_ENTRY_PATH")")
+
+# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
+source "$KC_ASDF_PLUGIN_PATH/lib/commands.sh" "$@"
