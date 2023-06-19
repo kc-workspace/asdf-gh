@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # dependabot for GitHub Actions for this repo
+  # dependabot for GitHub Actions for this repository
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

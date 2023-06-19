@@ -37,7 +37,7 @@
 There are several things template cannot generate for you,
 below are a list of thing we should do:
 
-1. make sure that your Github repo already exist at [kc-workspace/asdf-gh][plugin-gh]
+1. make sure that your GitHub repository already exist at [kc-workspace/asdf-gh][plugin-gh]
 2. please read [plugins create section][asdf-create-plugin] for more information
 3. remove `before start` section once you completed
 
@@ -83,9 +83,9 @@ Set to non-empty string to enable debug mode.
 You can override os and arch name if the default is not match with your need.
 `$ASDF_OVERRIDE_OS` and `$ASDF_OVERRIDE_ARCH` can be use to override value
 
-### Github rate-limit
+### GitHub rate-limit
 
-Something you just query too many data from Github,
+Something you just query too many data from GitHub,
 `$GITHUB_API_TOKEN` will help you increase that limit
 
 ## Contributors

@@ -347,7 +347,7 @@ kc_asdf_checksum() {
     return 1
 }
 
-## Get latest tags from Github
+## Get latest tags from GitHub
 ## usage: `kc_asdf_gh_latest`
 kc_asdf_gh_latest() {
   local repo="$KC_ASDF_APP_REPO"
