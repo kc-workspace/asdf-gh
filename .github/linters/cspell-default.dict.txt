@@ -1,3 +1,5 @@
+asdf
+tmpl
 tmpdir
 tmpfile
 tmppath
@@ -16,3 +18,10 @@ sha224sum
 sha256sum
 sha384sum
 sha512sum
+strftime
+mulitline
+kamontat
+chantrachirathumrong
+kc
+kcws
+mergify

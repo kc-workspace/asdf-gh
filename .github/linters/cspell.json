@@ -16,16 +16,12 @@
     "softwareTerms",
     "bash",
     "filetypes",
-    "customCommons",
-    "customApps",
-    "customSoftwares",
-    "customNames"
+    "defaultDict",
+    "customDict"
   ],
   "dictionaryDefinitions": [
-    { "name": "customCommons", "path": "./cspell-commons.dict.txt" },
-    { "name": "customApps", "path": "./cspell-apps.dict.txt" },
-    { "name": "customSoftwares", "path": "./cspell-softwares.dict.txt" },
-    { "name": "customNames", "path": "./cspell-names.dict.txt" }
+    { "name": "defaultDict", "path": "./cspell-default.dict.txt" },
+    { "name": "customDict", "path": "./cspell-custom.dict.txt" }
   ],
   "useGitignore": true,
   "gitignoreRoot": "../.."

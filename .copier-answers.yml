@@ -1,6 +1,6 @@
 ---
 ## Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v1.3.3-17-g42600e6
+_commit: v1.3.3-18-g5760cb8
 _src_path: .
 app_description: GitHub’s official command line tool
 app_name: gh
