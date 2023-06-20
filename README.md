@@ -25,7 +25,7 @@
 <h3 align="center">
   <a href="https://cli.github.com">gh</a>
   <span> · </span>
-  <a href="https://asdf-vm.com">ASDF</a>
+  <a href="https://asdf-vm.com">asdf</a>
 </h3>
 
 > This is an asdf-vm plugin generated from [template][template-gh].
