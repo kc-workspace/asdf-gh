@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-## Install a specific version of a tool to a specified location.
-## https://asdf-vm.com/plugins/create.html#bin-install
+## List legacy configuration filenames for determining
+## the specified version of the tool.
+## https://asdf-vm.com/plugins/create.html#bin-list-legacy-filenames
 
 ## -----------------------
 ## Customization functions

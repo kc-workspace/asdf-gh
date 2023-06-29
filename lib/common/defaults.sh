@@ -1,101 +1,73 @@
 #!/usr/bin/env bash
 
+## Base default functions for generic use
+
 ## Print error message
-## usage: `kc_asdf_error 'something went %s' 'wrong'`
+## usage: `kc_asdf_error '<namespace>' '<format>' '<variables>'`
+## output: 'yyyy-mm-dd hh:mm:ss [ERR] <namespace> - <message>'
 kc_asdf_error() {
-  kc_asdf_log "ERR" "$@"
+  __asdf_log "ERR" "$@"
+}
+
+## Print warn message
+## usage: `kc_asdf_warn '<namespace>' '<format>' '<variables>'`
+## output: 'yyyy-mm-dd hh:mm:ss [WRN] <namespace> - <message>'
+kc_asdf_warn() {
+  __asdf_log "WRN" "$@"
 }
 
 ## Print info message
-## usage: `kc_asdf_info 'this is a %s message' 'info'`
+## usage: `kc_asdf_info '<namespace>' '<format>' '<variables>'`
+## output: 'yyyy-mm-dd hh:mm:ss [INF] <namespace> - <message>'
 kc_asdf_info() {
-  kc_asdf_log "INF" "$@"
+  __asdf_log "INF" "$@"
 }
 
 ## Print debug message
-## usage: `kc_asdf_debug 'this is a %s message' 'debug'`
+## usage: `kc_asdf_debug '<namespace>' '<format>' '<variables>'`
+## output: 'yyyy-mm-dd hh:mm:ss [INF] <namespace> - <message>'
 kc_asdf_debug() {
-  kc_asdf_when_debug \
-    kc_asdf_log "DBG" "$@"
+  __asdf_if_debug \
+    __asdf_log "DBG" "$@"
 }
 
-## Print message
-## usage: `kc_asdf_printf "test %s" "1"`
-kc_asdf_printf() {
-  kc_asdf_log '' "$@"
+## Print help message header
+## usage: `kc_asdf_help_header 'Environment'`
+kc_asdf_help_header() {
+  printf "# %s\n" "$1"
 }
 
-## Print start input step in info message
-kc_asdf_step_start() {
-  local step="$1" format="$2"
+## Create start action to client
+## usage: `kc_asdf_step '<action_verb>' '<message>' $cmd`
+kc_asdf_step() {
+  local action="$1" message="$2"
   shift 2
 
-  kc_asdf_info "%9s | %-10s | $format" \
-    "starting" "$step" "$@"
+  kc_asdf_info "$action.action" "starting (%s)" "$message"
+  if "$@"; then
+    kc_asdf_info "$action.action" "completed successfully"
+  else
+    kc_asdf_error "$action.action" "completed with failure"
+    return 1
+  fi
 }
 
-## Print finished input step in info message
-kc_asdf_step_success() {
-  local step="$1" format="$2"
-  shift 2
-
-  kc_asdf_info "%9s | %-10s | $format" \
-    "finished" "$step" "$@"
-}
-
-## Print help header message
-kcs_asdf_help_header() {
-  kc_asdf_printf "# %s" "$1"
-}
-
-## Print log message with format
-## usage: `kc_asdf_log '$KEY' 'this is a %s' 'message'`
-## format: '[$KEY] $message'
-kc_asdf_log() {
-  local key="$1" format="$2"
-  shift 2
-
-  [ -n "$key" ] &&
-    printf "[%-3s] " "$key" >&2
-  # shellcheck disable=SC2059
-  printf "$format\n" "$@" >&2
-}
-
-## Print error message and exit the program
-## usage: `kc_asdf_throw 1 'something went %s' 'wrong'`
-kc_asdf_throw() {
-  local code="${1:-1}"
-  shift
-
-  kc_asdf_error "$@"
-  exit "$code"
-}
-
-## Execute input command if debug mode enabled
-## usage: `kc_asdf_when_debug echo "hello debugger"`
-kc_asdf_when_debug() {
-  [ -z "${DEBUG:-}" ] &&
-    return 0
-  "$@"
-}
-
-## Execute input command if debug mode disabled
-## usage: `kc_asdf_when_not_debug echo "hello normal user"`
-kc_asdf_when_not_debug() {
-  [ -n "${DEBUG:-}" ] &&
-    return 0
-  "$@"
-}
-
-## Execute input command (if dry-run is disabled)
+## Execute input command with debug what executed
 ## usage: `kc_asdf_exec echo 'run'`
+kc_asdf_exec() {
+  kc_asdf_debug "exec.defaults" "%s" "$*"
+  "$@"
+}
+
+## Run input command with dry-run support
+## usage: `kc_asdf_run echo 'run'`
 ## variables:
 ##   - DRY_RUN | DRYRUN | DRY
-kc_asdf_exec() {
+kc_asdf_run() {
   if [ -n "${DRY_RUN:-}" ] ||
     [ -n "${DRYRUN:-}" ] ||
     [ -n "${DRY:-}" ]; then
-    kc_asdf_printf "[DRY] %s" "$*"
+    __asdf_log "DRY" "" "$*"
     return 0
   fi
   "$@"
@@ -104,8 +76,8 @@ kc_asdf_exec() {
 ## Fetch redirected location from url
 ## e.g. `kc_asdf_fetch_location https://google.com`
 kc_asdf_fetch_location() {
-  local max_redirs=10 tmp_file
-  tmp_file="$(kc_asdf_temp_file)"
+  local tmpfile
+  tmpfile="$(kc_asdf_temp_file)"
   export CURL_OPTIONS=(
     --head
     --write-out "%{url_effective}"
@@ -114,16 +86,16 @@ kc_asdf_fetch_location() {
   export WGET_OPTIONS=(
     --server-response
     --spider
-    --output-file "$tmp_file"
+    --output-file "$tmpfile"
   )
 
   if ! kc_asdf_fetch "$1"; then
     unset CURL_OPTIONS WGET_OPTIONS
-    return 11
-  elif [ -f "$tmp_file" ]; then
-    sed -n -e "s|^[ ]*Location: *||p" <"$tmp_file" |
+    return 1
+  elif [ -f "$tmpfile" ]; then
+    sed -n -e "s|^[ ]*Location: *||p" <"$tmpfile" |
       tail -n1 &&
-      rm "$tmp_file"
+      rm "$tmpfile"
   fi
 
   unset CURL_OPTIONS WGET_OPTIONS
@@ -132,7 +104,6 @@ kc_asdf_fetch_location() {
 ## Download file from input url
 ## e.g. `kc_asdf_fetch_file https://google.com /tmp/index.html`
 kc_asdf_fetch_file() {
-  local max_redirs=10
   local url="$1" filename="$2"
   export CURL_OPTIONS=(
     --output "$filename"
@@ -143,9 +114,16 @@ kc_asdf_fetch_file() {
 
   if ! kc_asdf_fetch "$url"; then
     unset CURL_OPTIONS WGET_OPTIONS
-    return 12
+    return 1
   fi
   unset CURL_OPTIONS WGET_OPTIONS
+}
+
+## Parse version to major, minor and patch version
+## e.g. `read -r major minor patch <<< "$(kc_asdf_parse_version "$version")"`
+kc_asdf_parse_version() {
+  local version="$1"
+  echo "${version//./ }"
 }
 
 ## Fetch data from url
@@ -155,6 +133,7 @@ kc_asdf_fetch_file() {
 ##   - WGET_OPTIONS=() for wget options
 ##   - GITHUB_API_TOKEN for authentication
 kc_asdf_fetch() {
+  local ns="fetch.defaults"
   local url="$1"
   local cmd="" options=()
 
@@ -192,17 +171,128 @@ kc_asdf_fetch() {
       options+=(--header "Authorization: token $token")
   fi
 
-  if [ -n "$cmd" ]; then
-    kc_asdf_debug "exec: %s %s %s" \
-      "$cmd" "${options[*]}" "$url"
-    if ! "$cmd" "${options[@]}" "$url"; then
-      kc_asdf_error "fetching %s failed" "$url"
-      return 10
-    fi
-  else
-    kc_asdf_error "fetching command not found (e.g. curl, wget)"
-    return 10
+  [ -z "$cmd" ] &&
+    kc_asdf_error "$ns" "fetch command not found (e.g. curl, wget)" &&
+    return 1
+
+  if ! kc_asdf_exec "$cmd" "${options[@]}" "$url"; then
+    kc_asdf_error "$ns" "fetching %s failed" "$url"
+    return 1
   fi
+}
+
+## Extract compress file
+## usage: `kc_asdf_extract /tmp/file.tar.gz /tmp/file`
+kc_asdf_extract() {
+  local input="$1" output="$2"
+  kc_asdf_exec tar -xzf \
+    "$input" \
+    -C "$output" \
+    --strip-components "1"
+}
+
+## Unpack package file
+## usage: `kc_asdf_unpack /tmp/file.pkg /tmp/file`
+kc_asdf_unpack() {
+  local ns="unpack.defaults"
+  local input="$1" output="$2"
+
+  ! command -v pkgutil >/dev/null &&
+    kc_asdf_error "$ns" "cannot package because 'pkgutil' is missing" &&
+    return 1
+
+  kc_asdf_debug "$ns" "verifying package signature of %s" "$input"
+  local expected="signed by a developer certificate issued by Apple for distribution"
+  local signature actual
+  signature="$(kc_asdf_exec pkgutil --check-signature "$input")"
+  actual="$(echo "$signature" | grep -E '^\s+Status: ' | sed 's/[ ]*Status: //')"
+
+  if [[ "$expected" != "$actual" ]]; then
+    kc_asdf_error "$ns" "invalid pkg signature, please recheck (%s)" \
+      "$input"
+    echo "$signature" >&2
+    return 1
+  fi
+
+  [ -d "$output" ] &&
+    kc_asdf_debug "$ns" "delete output directory first" &&
+    rm -r "$output"
+  kc_asdf_exec pkgutil --expand-full \
+    "$input" "$output"
+}
+
+## Transfer input to output based on input mode
+## usage: `kc_adf_transfer 'copy|move|link' '<input>' '<output>'`
+kc_asdf_transfer() {
+  local ns="transfer.defaults"
+  local mode="$1" input="$2" output="$3"
+  kc_asdf_debug "$ns" "transfering '%s' using %s method" \
+    "$input" "$mode"
+
+  local type=""
+  [ -d "$input" ] &&
+    type="directory"
+  [ -f "$input" ] &&
+    type="file"
+  if [ -z "$type" ]; then
+    local dir base
+    dir="$(dirname "$input")"
+    base="$(basename "$input")"
+    kc_asdf_error "$ns" "missing '%s'" "$input"
+    # shellcheck disable=SC2011
+    kc_asdf_error "$ns" "directory contains only [%s]" \
+      "$(ls "$dir" | xargs echo)"
+    return 1
+  fi
+
+  ## If input is file, the output should always contains filename
+  ## example:
+  ##   valid   : /tmp/test.txt /home/test.txt
+  ##   invalid : /tmp/test.txt /home
+  if [[ "$type" == "file" ]]; then
+    local dir base
+    dir="$(dirname "$output")"
+    base="$(basename "$output")"
+
+    kc_asdf_debug "$ns" "we will create filename '%s' at %s" \
+      "$base" "$dir"
+    if ! [ -d "$dir" ]; then
+      kc_asdf_debug "$ns" "create missing directory (%s)" "$dir"
+      kc_asdf_exec mkdir -p "$dir"
+    fi
+  fi
+
+  if [[ "$mode" == "copy" ]]; then
+    if [[ "$type" == "directory" ]]; then
+      kc_asdf_exec cp -r "$input/." "$output"
+      return $?
+    else
+      kc_asdf_exec cp "$input" "$output"
+      return $?
+    fi
+  fi
+
+  if [[ "$mode" == "move" ]]; then
+    if [[ "$type" == "directory" ]]; then
+      [ -d "$output" ] &&
+        kc_asdf_debug "$ns" "target directory cannot exist, removed %s" \
+          "$output" &&
+        rm -r "$output"
+      kc_asdf_exec mv "$input" "$output"
+      return $?
+    else
+      kc_asdf_exec mv "$input" "$output"
+      return $?
+    fi
+  fi
+
+  if [[ "$mode" == "link" ]]; then
+    kc_asdf_exec ln -s "$input" "$output"
+    return $?
+  fi
+
+  kc_asdf_error "$ns" "invalid transfer mode (%s)" "$mode"
+  return 1
 }
 
 ## Parse template with input values
@@ -219,257 +309,21 @@ kc_asdf_template() {
   printf "%s" "$template"
 }
 
-## Quick helper to throw error if install type is not support
-## usage: `kc_asdf_install_not_support "ref"`
-## variables:
-##   - ASDF_INSTALL_TYPE - set by asdf core
-kc_asdf_install_not_support() {
-  for t in "$@"; do
-    if [[ "$t" == "${ASDF_INSTALL_TYPE:?}" ]]; then
-      kc_asdf_throw 7 "your install type (%s) is not supported by plugins" \
-        "$t"
+## Validate commands must exist;
+## otherwise, it will exit with error
+## usage: `kc_asdf_require_commands 'java'`
+kc_asdf_require_commands() {
+  local ns="req-cmd.defaults"
+
+  kc_asdf_debug "$ns" "current plugins requires [%s] commands" \
+    "$*"
+  for cmd in "$@"; do
+    if ! command -v "$cmd" >/dev/null; then
+      kc_asdf_error "$ns" "requires '%s' command but missing" \
+        "$cmd"
+      exit 1
     fi
   done
-}
-
-## Get current OS name
-## usage: `kc_asdf_get_os`
-## variable:
-##   - ASDF_OVERRIDE_OS for override arch
-kc_asdf_get_os() {
-  local os="${ASDF_OVERRIDE_OS:-}"
-  if [ -n "$os" ]; then
-    kc_asdf_info "user overriding OS to '%s'" "$os"
-    printf "%s" "$os"
-    return 0
-  fi
-
-  os="$(uname | tr '[:upper:]' '[:lower:]')"
-  case "$os" in
-  darwin)
-    os="macOS"
-    ;;
-  linux)
-    os="linux"
-    ;;
-  esac
-
-  printf "%s" "$os"
-}
-
-## Get current Arch name
-## usage: `kc_asdf_get_arch`
-## variable:
-##   - ASDF_OVERRIDE_ARCH for override arch
-kc_asdf_get_arch() {
-  local arch="${ASDF_OVERRIDE_ARCH:-}"
-  if [ -n "$arch" ]; then
-    kc_asdf_info "user overriding arch to '%s'" "$arch"
-    printf "%s" "$arch"
-    return 0
-  fi
-
-  arch="$(uname -m)"
-  case "$arch" in
-  aarch64*)
-    arch="arm64"
-    ;;
-  armv5*)
-    arch="armv5"
-    ;;
-  armv6*)
-    arch="armv6"
-    ;;
-  armv7*)
-    arch="armv7"
-    ;;
-  i386)
-    arch="386"
-    ;;
-  i686)
-    arch="386"
-    ;;
-  powerpc64le)
-    arch="ppc64le"
-    ;;
-  ppc64le)
-    arch="ppc64le"
-    ;;
-  x86)
-    arch="386"
-    ;;
-  x86_64)
-    arch="amd64"
-    ;;
-  esac
-
-  printf "%s" "$arch"
-}
-
-## Extract compress file
-## usage: `kc_asdf_extract /tmp/file.tar.gz /tmp/file`
-kc_asdf_extract() {
-  local input="$1" output="$2"
-  local options=(
-    -xzf
-    "$input"
-    -C "$output"
-    --strip-components "1"
-  )
-
-  kc_asdf_debug "exec: tar %s" \
-    "${options[*]}"
-  tar "${options[@]}"
-}
-
-## Check shasum of input txt
-## usage: `kc_asdf_checksum /tmp/test/checksum.txt`
-kc_asdf_checksum() {
-  local input="$1"
-  local dir file
-  dir="$(dirname "$input")"
-  file="$(basename "$input")"
-
-  local bit="256"
-  local cmd="sha${bit}sum"
-  command -v "$cmd" >/dev/null ||
-    cmd="shasum"
-
-  kc_asdf_debug "exec: %s --check %s (%s)" \
-    "$cmd" "$file" "$dir"
-
-  local tmp="$PWD"
-  cd "$dir" ||
-    return 1
-  "$cmd" --check "$file" >/dev/null ||
-    return 1
-  cd "$tmp" ||
-    return 1
-}
-
-## Get latest tags from GitHub
-## usage: `kc_asdf_gh_latest`
-kc_asdf_gh_latest() {
-  local repo="$KC_ASDF_APP_REPO"
-  local url="" version=""
-
-  [[ "$repo" =~ ^https://github.com ]] ||
-    return 30
-
-  url="$(kc_asdf_fetch_location "$repo/releases/latest")"
-
-  kc_asdf_debug "github latest url: %s" "$url"
-  if [ -n "$url" ] && [[ "$url" != "$repo/releases" ]]; then
-    version="$(printf "%s\n" "$url" | sed 's|.*/tag/v\{0,1\}||')"
-    kc_asdf_debug "use '%s' mode to resolve latest" "github"
-  fi
-
-  kc_asdf_debug "latest version is '%s'" "$version"
-  if [ -n "$version" ]; then
-    printf "%s" "$version"
-  else
-    return 31
-  fi
-}
-
-## List all tags from Git
-## usage: `output_file="$(kc_asdf_tags_list)"`
-kc_asdf_tags_list() {
-  local repo="$KC_ASDF_APP_REPO"
-  local output
-  output="$(kc_asdf_temp_file)"
-
-  kc_asdf_debug "querying all tags from %s" \
-    "$repo"
-  if git ls-remote --tags --refs "$repo" |
-    grep -o 'refs/tags/.*' |
-    cut -d/ -f3- >"$output"; then
-    printf "%s" "$output"
-    return 0
-  fi
-  kc_asdf_error "cannot list tags from repo (%s)" \
-    "$repo"
-  return 20
-}
-
-## Filter only stable tags from tags list
-## usage: `output_file="$(kc_asdf_tags_stable "$input_file")"`
-kc_asdf_tags_stable() {
-  local input="$1" output
-  output="$(kc_asdf_temp_file)"
-  local query='(-src|-dev|-latest|-stm|[-\.]rc|-alpha|-beta|[-\.]pre|-next|snapshot|master)'
-
-  kc_asdf_debug "filtering stable tags from %s" \
-    "$input"
-  if [ -f "$input" ] &&
-    grep -ivE "$query" "$input" >"$output"; then
-    kc_asdf_when_not_debug rm "$input"
-    printf "%s" "$output"
-    return 0
-  fi
-  kc_asdf_error "filter stable tags failed (input=%s)" \
-    "$input"
-  return 24
-}
-
-## Sorting tags using semver
-## usage: `output_file="$(kc_asdf_tags_sort "$input_file")"`
-kc_asdf_tags_sort() {
-  local input="$1" output
-  output="$(kc_asdf_temp_file)"
-
-  kc_asdf_debug "sorting tags from %s" \
-    "$input"
-  if [ -f "$input" ] &&
-    sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' "$input" |
-    LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}' >"$output"; then
-    kc_asdf_when_not_debug rm "$input"
-    printf "%s" "$output"
-    return 0
-  fi
-  kc_asdf_error "sort tags failed (input=%s)" \
-    "$input"
-  return 24
-}
-
-## Filter only tag with input regex
-## usage: `output_file="$(kc_asdf_tags_only "$input_file" ^v)"`
-kc_asdf_tags_only() {
-  local input="$1" output
-  output="$(kc_asdf_temp_file)"
-  local regex="${2:-^\\s*v}"
-
-  kc_asdf_debug "filtering tags with regex '%s' from %s" \
-    "$regex" "$input"
-  if [ -f "$input" ] &&
-    grep -iE "$regex" "$input" >"$output"; then
-    kc_asdf_when_not_debug rm "$input"
-    printf "%s" "$output"
-    return 0
-  fi
-  kc_asdf_error "filter tags failed (input=%s)" \
-    "$input"
-  return 24
-}
-
-## Formatting tags by remove input regex
-## usage: `output_file="$(kc_asdf_tags_format "$input_file" ^v)"`
-kc_asdf_tags_format() {
-  local input="$1" output
-  output="$(kc_asdf_temp_file)"
-  local regex="${2:-^\\s*v}"
-
-  kc_asdf_debug "formatting tags with regex '%s' from %s" \
-    "$regex" "$input"
-  if [ -f "$input" ] &&
-    sed "s/$regex//" "$input" >"$output"; then
-    kc_asdf_when_not_debug rm "$input"
-    printf "%s" "$output"
-    return 0
-  fi
-  kc_asdf_error "format tags failed (input=%s)" \
-    "$input"
-  return 24
 }
 
 ## Create temp file and return path

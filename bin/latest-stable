@@ -3,18 +3,14 @@
 ## Determine the latest stable version of a tool.
 ## https://asdf-vm.com/plugins/create.html#bin-latest-stable
 
-## Your script specific code
+## -----------------------
+## Customization functions
+
 # kc_asdf_main() {
 #   return 0
 # }
 
-## To filter latest version out
-# _kc_asdf_latest_filter() {
-#   local tmpfile="$1" query="$2"
-#   kc_asdf_tags_only "$tmpfile" "$query"
-# }
-
-## -----------------------------------------------------------------------
+## -----------------------
 
 set -euo pipefail
 

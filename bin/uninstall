@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-## Install a specific version of a tool to a specified location.
-## https://asdf-vm.com/plugins/create.html#bin-install
+## Uninstall the provided version of a tool.
+## https://asdf-vm.com/plugins/create.html#bin-uninstall
 
 ## -----------------------
 ## Customization functions

@@ -19,6 +19,11 @@
       alt="version"
       src="https://img.shields.io/github/v/release/kc-workspace/asdf-gh?style=flat-square&logo=github">
   </a>
+  <a href="https://github.com/kc-workspace/asdf-gh/commits/main">
+    <img
+      alt="version"
+      src="https://img.shields.io/github/last-commit/kc-workspace/asdf-gh/main?style=flat-square&logo=github">
+  </a>
 </p>
 
 <!-- Links section -->
@@ -60,6 +65,8 @@ asdf install gh latest
 
 # Set a version globally
 asdf global gh latest
+# Set a version locally
+asdf local gh latest
 
 # Now gh commands are available
 gh
@@ -71,29 +78,35 @@ how to install & manage versions.
 ## Features
 
 Plugins generated from asdf-plugin-template repository will
-contains several extra features for every user including all below
+contains several extra features for every user including all below.
 
-### Debug mode
+- `$DEBUG=<any-string>` to enabled debug mode
+- `$ASDF_INSECURE=<any-string>` to disable security features (e.g. checksum)
+- `$ASDF_NO_CHECK=<any-string>` to disable pre-check features (e.g. check-cmd)
+- `$ASDF_OVERRIDE_OS=<os>` to override os name
+- `$ASDF_OVERRIDE_ARCH=<arch>` to override arch name
+- `$GITHUB_TOKEN=<token>` to pass github token on http request
+- `$ASDF_LOG_FORMAT=<format>` to custom log format, there are several variables
+  - **{datetime}** - for current datetime
+  - **{date}** - for current date
+  - **{time}** - for current time
+  - **{level}** - for log level (always be 3 characters uppercase)
+  - **{namespace}** - for formatted namespace (always have same lenght)
+  - **{ns}** - for raw namespace (no formatting applied)
+  - **{message}** - for log message
 
-You can enabled debug mode using environment variable called `$DEBUG`.
-Set to non-empty string to enable debug mode.
+### Addition Features
 
-### Overwrite mode
-
-You can override os and arch name if the default is not match with your need.
-`$ASDF_OVERRIDE_OS` and `$ASDF_OVERRIDE_ARCH` can be use to override value
-
-### GitHub rate-limit
-
-Something you just query too many data from GitHub,
-`$GITHUB_API_TOKEN` will help you increase that limit
+The plugins might contains additional features
+in addition to default features above.
+You can take a look at [README.plugin.md][app-readme]
 
 ## Contributors
 
-1. All functions and variables should prefix with `kc_asdf_*` or `KC_ASDF_*`
-2. All private functions should has `__` prefix (e.g. __kc_asdf_test)
-2. `lib/common` and `lib/commands.sh` should not be modify as it might overwrite
-3. All `bin/*` script should always has below template
+1. Only `bin/*` and `lib/utils.sh` are open for modify
+2. There several functions available on bin/* script [bin/README.md]
+3. The function defined on `lib/utils.sh` will be available everywhere
+4. New create `bin/*` script should use below template as starter
 
 ```bash
 #!/usr/bin/env bash
@@ -101,12 +114,14 @@ Something you just query too many data from GitHub,
 ## <description>
 ## https://asdf-vm.com/plugins/create.html
 
-## Your script specific code
-# kc_asdf_main() {
-#   return 0
-# }
+## -----------------------
+## Customization functions
 
-## -----------------------------------------------------------------------
+kc_asdf_main() {
+  return 0
+}
+
+## -----------------------
 
 set -euo pipefail
 
@@ -116,13 +131,13 @@ KC_ASDF_PLUGIN_ENTRY_NAME="$(basename "$KC_ASDF_PLUGIN_ENTRY_PATH")"
 export KC_ASDF_PLUGIN_PATH
 KC_ASDF_PLUGIN_PATH=$(dirname "$(dirname "$KC_ASDF_PLUGIN_ENTRY_PATH")")
 
-# shellcheck source=/dev/null
-source "$KC_ASDF_PLUGIN_PATH/lib/commands.sh" "$KC_ASDF_PLUGIN_ENTRY_NAME"
+# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
+source "$KC_ASDF_PLUGIN_PATH/lib/commands.sh" "$@"
 ```
 
 <!-- LINKS SECTION -->
 
-
+[app-readme]: ./README.plugin.md
 [plugin-gh]: https://github.com/kc-workspace/asdf-gh
 [template-gh]: https://github.com/kc-workspace/asdf-plugin-template
 [asdf-link]: https://github.com/asdf-vm/asdf

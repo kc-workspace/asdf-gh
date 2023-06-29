@@ -4,12 +4,14 @@
 ## One link per line.
 ## https://asdf-vm.com/plugins/create.html#bin-help-links
 
-## Your script specific code
+## -----------------------
+## Customization functions
+
 # kc_asdf_main() {
 #   return 0
 # }
 
-## -----------------------------------------------------------------------
+## -----------------------
 
 set -euo pipefail
 

@@ -1,39 +1,46 @@
 ---
 ## Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v1.3.3-25-g8a6ee01
-_src_path: .
-app_description: GitHub’s official command line tool
+_commit: v1.3.3-39-g8bcf169
+_src_path: /Users/kamontat/Desktop/Personal/asdf-plugin-template
+app_desc: GitHub’s official command line tool
 app_name: gh
 app_repo: https://github.com/cli/cli
-app_version_prefix: v
 app_website: https://cli.github.com
+archive_conf_path: ''
+archive_conf_strip: 1
+archive_enabled: true
+archive_regex: (\.tar\.gz|\.tgz|\.zip)$
+checksum_conf_algorithm: 256
+checksum_enabled: true
+checksum_url: https://github.com/cli/cli/releases/download/v{version}/gh_{version}_checksums.txt
 custom_arch_enabled: true
 custom_arch_yaml:
     aarch64*: arm64
     armv5*: armv5
     armv6*: armv6
     armv7*: armv7
-    i386: 386
-    i686: 386
+    i386: '386'
+    i686: '386'
     powerpc64le: ppc64le
     ppc64le: ppc64le
-    x86: 386
+    x86: '386'
     x86_64: amd64
+custom_bin_paths: bin
 custom_non_stable_version: (-src|-dev|-latest|-stm|[-\.]rc|-alpha|-beta|[-\.]pre|-next|snapshot|master)
 custom_os_enabled: true
 custom_os_yaml:
     darwin: macOS
     linux: linux
-download_checksum_cmd: '256'
-download_checksum_enabled: true
-download_checksum_link: https://github.com/cli/cli/releases/download/v{version}/gh_{version}_checksums.txt
-download_link: https://github.com/cli/cli/releases/download/v{version}/gh_{version}_{os}_{arch}.$(download_extension)
-download_location: gh
-download_strip: 1
-download_type: archive-file
-install_type: directory
+custom_require_commands: ''
+download_url: https://github.com/cli/cli/releases/download/v{version}/gh_{version}_{os}_{arch}.$(download_extension)
+gpg_enabled: false
+install_map_enabled: false
+package_enabled: false
 plugin_author: Kamontat Chantrachirathumrong
 plugin_name: asdf-gh
 plugin_org: kc-workspace
-plugin_repo: https://github.com/kc-workspace/asdf-gh
-test_cmd_args: ''
+plugin_repo: https://github.com/kc-workspace/asdf-gh.git
+source_enabled: false
+test_cmd_args: --version
+version_file_enabled: false
+version_prefix: v

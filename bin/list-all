@@ -3,18 +3,14 @@
 ## List all installable versions.
 ## https://asdf-vm.com/plugins/create.html#bin-list-all
 
-## Your script specific code
+## -----------------------
+## Customization functions
+
 # kc_asdf_main() {
 #   return 0
 # }
 
-## To filter version out from list
-# _kc_asdf_list_filter() {
-#   local tmpfile="$1"
-#   kc_asdf_tags_only "$tmpfile" "1"
-# }
-
-## -----------------------------------------------------------------------
+## -----------------------
 
 set -euo pipefail
 

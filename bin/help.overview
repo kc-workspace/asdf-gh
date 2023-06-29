@@ -3,12 +3,14 @@
 ## Output a general description about the plugin and the tool being managed.
 ## https://asdf-vm.com/plugins/create.html#bin-help-overview
 
-## Your script specific code
+## -----------------------
+## Customization functions
+
 # kc_asdf_main() {
 #   return 0
 # }
 
-## -----------------------------------------------------------------------
+## -----------------------
 
 set -euo pipefail
 

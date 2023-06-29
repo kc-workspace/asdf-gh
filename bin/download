@@ -4,22 +4,14 @@
 ## to a specified location.
 ## https://asdf-vm.com/plugins/create.html#bin-download
 
-## Your script specific code
+## -----------------------
+## Customization functions
+
 # kc_asdf_main() {
 #   return 0
 # }
 
-## Custom logic to update checksum file
-# _kc_asdf_custom_checksum() {
-#   ## filename is app file to check
-#   local filename="$1"
-#   ## checksum_tmp is a raw checksum file from url
-#   local checksum_tmp="$2"
-#   ## checksum_path is a output normalize checksum file
-#   local checksum_path="$3"
-# }
-
-## -----------------------------------------------------------------------
+## -----------------------
 
 set -euo pipefail
 
