@@ -1,14 +1,52 @@
-# Script bin
+# Contributors
 
-> https://asdf-vm.com/plugins/create.html#scripts-overview
+Thank you for investing your time in contributing to our project!
 
-## Golden Rules for Plugin Scripts
+## Golden rules for contributing
 
-1. scripts should NOT call other asdf commands
-2. keep your dependency list of Shell tools/commands small
-3. avoid non-portable tools or command flags. For example, sort -V. See our asdf core list of banned commands
+> [asdf-golden-rules][asdf-golden-rules]
 
-> https://asdf-vm.com/plugins/create.html#golden-rules-for-plugin-scripts
+1. Only `bin/*` and `lib/utils.sh` are open for modify
+2. There several functions available on bin/* script [bin/README.md]
+3. The function defined on `lib/utils.sh` will be available everywhere
+4. Scripts should NOT call other asdf commands
+5. Keep your dependency list of Shell tools/commands small
+6. avoid non-portable tools or command flags. ([banned-commands][banned-commands])
+7. New create `bin/*` script should use below template as starter
+
+```bash
+#!/usr/bin/env bash
+
+## <description>
+## https://asdf-vm.com/plugins/create.html
+
+## -----------------------
+## Customization functions
+
+kc_asdf_main() {
+  return 0
+}
+
+## -----------------------
+
+set -euo pipefail
+
+export KC_ASDF_PLUGIN_ENTRY_PATH=${BASH_SOURCE[0]}
+export KC_ASDF_PLUGIN_ENTRY_NAME
+KC_ASDF_PLUGIN_ENTRY_NAME="$(basename "$KC_ASDF_PLUGIN_ENTRY_PATH")"
+export KC_ASDF_PLUGIN_PATH
+KC_ASDF_PLUGIN_PATH=$(dirname "$(dirname "$KC_ASDF_PLUGIN_ENTRY_PATH")")
+
+# shellcheck source-path=SCRIPTDIR/../lib/commands.sh
+source "$KC_ASDF_PLUGIN_PATH/lib/commands.sh" "$@"
+```
+
+## Scripts
+
+> [asdf overview][asdf-overview]
+
+There are several callbacks allow to customize script
+without touching built-in utilities.
 
 ## Generic scripts callback
 
@@ -183,3 +221,9 @@ _kc_asdf_custom_help() {
   new_link "Name" "https://example.com"
 }
 ```
+
+<!-- LINKS SECTION -->
+
+[asdf-golden-rules]: https://asdf-vm.com/plugins/create.html#golden-rules-for-plugin-scripts
+[asdf-overview]: https://asdf-vm.com/plugins/create.html#scripts-overview
+[banned-commands]: https://github.com/asdf-vm/asdf/blob/master/test/banned_commands.bats
