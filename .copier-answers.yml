@@ -1,6 +1,6 @@
 ---
 ## Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v1.3.3-45-g07976c8
+_commit: v1.3.3-50-gd56c40f
 _src_path: /Users/kamontat/Desktop/Personal/asdf-plugin-template
 app_desc: GitHub’s official command line tool
 app_name: gh

@@ -12,7 +12,9 @@ source "${KC_ASDF_PLUGIN_PATH:?}/lib/common/index.sh"
 
 if command -v _kc_asdf_custom_env >/dev/null; then
   kc_asdf_debug "$ns" "user defined custom environment variables"
-  _kc_asdf_custom_env
+  if ! _kc_asdf_custom_env; then
+    kc_asdf_warn "$ns" "custom environment return error"
+  fi
 fi
 
 __asdf_source_bin_lib \

@@ -185,10 +185,16 @@ kc_asdf_fetch() {
 ## usage: `kc_asdf_extract /tmp/file.tar.gz /tmp/file`
 kc_asdf_extract() {
   local input="$1" output="$2"
-  kc_asdf_exec tar -xzf \
-    "$input" \
-    -C "$output" \
-    --strip-components "1"
+  local ext="${input##*.}"
+
+  if [[ "$ext" == "zip" ]]; then
+    kc_asdf_exec unzip -qo "$input" -d "$output"
+  else
+    kc_asdf_exec tar -xzf \
+      "$input" \
+      -C "$output" \
+      --strip-components "1"
+  fi
 }
 
 ## Unpack package file
@@ -245,6 +251,7 @@ kc_asdf_transfer() {
     return 1
   fi
 
+  kc_asdf_debug "$ns" "input type is %s" "$type"
   ## If input is file, the output should always contains filename
   ## example:
   ##   valid   : /tmp/test.txt /home/test.txt
