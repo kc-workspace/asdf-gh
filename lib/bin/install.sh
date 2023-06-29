@@ -9,7 +9,7 @@ __asdf_bin() {
   local version="${ASDF_INSTALL_VERSION:?}"
   local indir="${ASDF_DOWNLOAD_PATH:?}"
   local outdir="${ASDF_INSTALL_PATH:?}"
-  local concurrency="${ASDF_CONCURRENCY:?}"
+  local concurrency="${ASDF_CONCURRENCY:-1}"
 
   kc_asdf_debug "$ns" "installing %s %s %s" \
     "$KC_ASDF_APP_NAME" "$type" "$version"
