@@ -6,8 +6,8 @@ app_desc: GitHub’s official command line tool
 app_name: gh
 app_repo: https://github.com/cli/cli
 app_website: https://cli.github.com
-archive_conf_path: ''
-archive_conf_strip: 1
+archive_conf_path: gh_{version}_{os}_{arch}
+archive_conf_strip: 0
 archive_enabled: true
 archive_regex: (\.tar\.gz|\.tgz|\.zip)$
 checksum_conf_algorithm: 256
