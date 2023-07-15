@@ -81,6 +81,7 @@ Plugins generated from asdf-plugin-template repository will
 contains several extra features for every user including all below.
 
 - `$DEBUG=<any-string>` to enabled debug mode
+- `$ASDF_FORCE_DOWNLOAD=<any-string>` to always download even cache exist
 - `$ASDF_INSECURE=<any-string>` to disable security features (e.g. checksum)
 - `$ASDF_NO_CHECK=<any-string>` to disable pre-check features (e.g. check-cmd)
 - `$ASDF_OVERRIDE_OS=<os>` to override os name

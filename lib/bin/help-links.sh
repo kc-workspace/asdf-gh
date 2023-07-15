@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+kc_asdf_load_addon "help"
+
 __asdf_bin_help_link_printf() {
   local name="${1:?}" url="${2:?}"
   printf "%-12s : %s\n" \
@@ -11,13 +13,15 @@ __asdf_bin() {
   local ns="$1"
   shift
 
-  kc_asdf_help_header "Links"
+  kc_asdf_optional \
+    kc_asdf_help_header "Links"
   __asdf_bin_help_link_printf \
     "Application" "$KC_ASDF_APP_REPO"
   __asdf_bin_help_link_printf \
     "Plugin" "$KC_ASDF_REPO"
 
-  if command -v _kc_asdf_custom_help >/dev/null; then
+  kc_asdf_optional \
     _kc_asdf_custom_help __asdf_bin_help_link_printf
-  fi
+
+  echo
 }

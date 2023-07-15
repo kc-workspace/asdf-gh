@@ -84,6 +84,29 @@ _kc_asdf_custom_arch() {
 }
 ```
 
+3. To custom environment variables, use `_kc_asdf_custom_env()`
+
+```bash
+## If this return error, it will only log warning message
+## and continue program
+_kc_asdf_custom_env() {
+  kc_asdf_is_darwin &&
+    export ASDF_INSECURE=true
+  return 0
+}
+```
+
+4. To custom enable-disable features, use `_kc_asdf_custom_enabled_features()`
+
+```bash
+## If this return error, mean that feature is disabled
+_kc_asdf_custom_enabled_features() {
+  ## feature name: checksum, gpg
+  local feature="$1"
+  return 0
+}
+```
+
 ## List all callback
 
 1. To filter value from list, use `_kc_asdf_custom_filter()`.
@@ -115,12 +138,14 @@ _kc_asdf_custom_filter() {
 
 ```bash
 _kc_asdf_custom_checksum() {
+  ## create function (create "<filename>" "[<checksum>]")
+  local create="$1"
   ## filename is app file to check
-  local filename="$1"
+  local filename="$2"
   ## checksum_tmp is a raw checksum file from url
-  local checksum_tmp="$2"
-  ## checksum_path is a output normalize checksum file
-  local checksum_path="$3"
+  local checksum_tmp="$3"
+
+  "$create" "$filename" "$(cat "$checksum_tmp")"
 }
 ```
 
@@ -134,7 +159,35 @@ _kc_asdf_custom_download_url() {
 }
 ```
 
-3. To support download source code, use `_kc_asdf_custom_download_source()`
+3. To support custom version before download, use `_kc_asdf_custom_version()`
+
+```bash
+_kc_asdf_custom_version() {
+  local version="$1"
+  printf "%s" "$version"
+}
+```
+
+4. To support custom gpg verifying path, use `_kc_asdf_custom_gpg_filepath()`
+
+```bash
+_kc_asdf_custom_gpg_filepath() {
+  local filepath="$1"
+  printf "%s" "$filepath"
+}
+```
+
+5. To support custom source URL, use `_kc_asdf_custom_source_url()`
+
+```bash
+## printf empty string will indicate there are a problem
+_kc_asdf_custom_source_url() {
+  local version="$1" old_url="$2"
+  printf "%s" "$old_url"
+}
+```
+
+6. To support download source code, use `_kc_asdf_custom_download_source()`
 
 ```bash
 ## This will required _kc_asdf_install_source to defined too
@@ -145,27 +198,27 @@ _kc_asdf_custom_download_source() {
 }
 ```
 
-4. To support action after downloaded, use `_kc_asdf_custom_post_download()`
+7. To support action after downloaded, use `_kc_asdf_custom_post_download()`
 
 ```bash
-## This won't run on download source code (ref mode)
+## type can be either 'version' or 'ref'
+## version is downloaded version
+## result is downloaded directory
 _kc_asdf_custom_post_download() {
-  local version="$1" download_url="$2"
-  local tmppath="$3"
+  local type="$1" version="$2"
+  local output="$3"
 }
 ```
 
 ## Install callback
 
-1. To support install from source code, use `_kc_asdf_custom_install_source()`
+1. To support custom build source code, use `_kc_asdf_custom_source_build()`
 
 ```bash
-## This will required _kc_asdf_download_source to defined too
-## when `asdf install plugin ref:main`
-_kc_asdf_custom_install_source() {
-  local version="$1"
-  local download_path="$2" install_path="$3"
-  local concurrency="$4"
+## current directory will be at source code directory
+_kc_asdf_custom_source_build() {
+  local version="$1" output="$2"
+  local concurrency="$3"
 }
 ```
 

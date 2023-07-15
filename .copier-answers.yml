@@ -1,10 +1,26 @@
 ---
 ## Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v1.3.3-50-gd56c40f
-_src_path: /Users/kamontat/Desktop/Personal/asdf-plugin-template
+_commit: v2.0.1
+_src_path: gh:kc-workspace/asdf-plugin-template.git
+addon_yaml:
+    archive: true
+    checksum: true
+    download: true
+    fetch: true
+    git: false
+    github: true
+    gpg: false
+    help: true
+    install: true
+    package: false
+    python: false
+    system: true
+    tags: true
+    version: true
 app_desc: GitHub’s official command line tool
 app_name: gh
 app_repo: https://github.com/cli/cli
+app_type: standalone
 app_website: https://cli.github.com
 archive_conf_path: gh_{version}_{os}_{arch}
 archive_conf_strip: 0

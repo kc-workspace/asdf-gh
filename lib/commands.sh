@@ -17,11 +17,11 @@ if command -v _kc_asdf_custom_env >/dev/null; then
   fi
 fi
 
-__asdf_source_bin_lib \
-  "${KC_ASDF_PLUGIN_PATH:?}" \
-  "${KC_ASDF_PLUGIN_ENTRY_NAME//./-}"
+## This load is optional.
+## If load failed, just print error message and continue
+__asdf_load "bin" "${KC_ASDF_PLUGIN_ENTRY_NAME//./-}" || printf ''
 
-kc_asdf_debug "$ns" "executing %s with [%s]" \
+kc_asdf_debug "$ns" "starting %s with [%s]" \
   "$KC_ASDF_PLUGIN_ENTRY_NAME" "$*"
 if command -v kc_asdf_main >/dev/null; then
   kc_asdf_debug "$ns" "use main function instead" \
@@ -31,7 +31,10 @@ else
   if command -v __asdf_bin >/dev/null; then
     __asdf_bin "${KC_ASDF_PLUGIN_ENTRY_NAME}.bin" "$@"
   else
-    __asdf_bin_unknown "$KC_ASDF_PLUGIN_ENTRY_NAME"
+    kc_asdf_error "bin.internal" \
+      "missing default for 'bin/%s', %s is require" \
+      "$KC_ASDF_PLUGIN_ENTRY_NAME" "kc_asdf_main()"
+    exit 1
   fi
 fi
 

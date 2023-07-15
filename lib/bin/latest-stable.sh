@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+kc_asdf_load_addon "fetch"
+kc_asdf_load_addon "github"
+kc_asdf_load_addon "tags"
+
 __asdf_bin() {
   # shellcheck disable=SC2034
   local ns="$1"
@@ -7,8 +11,9 @@ __asdf_bin() {
 
   local query="$1" def_query="[0-9]"
   if [[ "$query" == "$def_query" ]]; then
-    kc_asdf_debug "$ns" "try get latest version from github"
-    kc_asdf_gh_latest &&
+    command -v kc_asdf_github_latest >/dev/null &&
+      kc_asdf_debug "$ns" "try get latest version from github" &&
+      kc_asdf_github_latest &&
       return 0
   fi
 

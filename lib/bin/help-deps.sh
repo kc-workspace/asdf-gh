@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+kc_asdf_load_addon "help"
+
 __asdf_bin_help_deps_add() {
   for dep in "$@"; do
     echo "$dep"
@@ -11,16 +13,18 @@ __asdf_bin() {
   local ns="$1"
   shift
 
-  kc_asdf_help_header "Dependencies"
+  kc_asdf_optional \
+    kc_asdf_help_header "Dependencies"
   local deps=(git curl sed grep mktemp xargs tr)
-
   deps+=(sha256sum shasum)
+  deps+=(tar unzip)
 
   for dep in "${deps[@]}"; do
     echo "$dep"
   done
 
-  if command -v _kc_asdf_custom_help >/dev/null; then
+  kc_asdf_optional \
     _kc_asdf_custom_help __asdf_bin_help_deps_add
-  fi
+
+  echo
 }
