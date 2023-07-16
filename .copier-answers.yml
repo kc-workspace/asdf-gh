@@ -1,6 +1,6 @@
 ---
 ## Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v2.0.1
+_commit: v2.0.2
 _src_path: gh:kc-workspace/asdf-plugin-template.git
 addon_yaml:
     archive: true
