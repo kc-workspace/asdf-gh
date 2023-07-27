@@ -16,7 +16,9 @@ __asdf_bin() {
   kc_asdf_optional \
     kc_asdf_help_header "Links"
   __asdf_bin_help_link_printf \
-    "Application" "$KC_ASDF_APP_REPO"
+    "Website" "$KC_ASDF_APP_WEBS"
+  [ -n "$KC_ASDF_APP_REPO" ] && __asdf_bin_help_link_printf \
+    "Repository" "$KC_ASDF_APP_REPO"
   __asdf_bin_help_link_printf \
     "Plugin" "$KC_ASDF_REPO"
 

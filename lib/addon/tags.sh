@@ -6,8 +6,20 @@ kc_asdf_tags_list() {
   local ns="tags-list.addon"
   local repo="$KC_ASDF_APP_REPO"
   local output
-  output="$(kc_asdf_temp_file)"
 
+  if command -v _kc_asdf_custom_tags >/dev/null; then
+    output="$(kc_asdf_temp_file)"
+    kc_asdf_debug "$ns" "developer custom list of tags"
+    _kc_asdf_custom_tags >"$output"
+    printf "%s" "$output"
+    return 0
+  fi
+
+  [ -z "$repo" ] &&
+    kc_asdf_error "$ns" "application didn't contains git repo" &&
+    return 1
+
+  output="$(kc_asdf_temp_file)"
   kc_asdf_debug "$ns" "querying from %s" "$repo"
   if git ls-remote --tags --refs "$repo" |
     grep -o 'refs/tags/.*' |

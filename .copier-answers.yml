@@ -1,6 +1,6 @@
 ---
 ## Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v2.0.2
+_commit: v2.1.1
 _src_path: gh:kc-workspace/asdf-plugin-template.git
 addon_yaml:
     archive: true
@@ -29,8 +29,20 @@ archive_regex: (\.tar\.gz|\.tgz|\.zip)$
 checksum_conf_algorithm: 256
 checksum_enabled: true
 checksum_url: https://github.com/cli/cli/releases/download/v{version}/gh_{version}_checksums.txt
-custom_arch_enabled: true
-custom_arch_yaml:
+custom_bin_paths: bin
+custom_non_stable_version: (-src|-dev|-latest|-stm|[-\.]rc|-alpha|-beta|[-\.]pre|-next|snapshot|master)
+custom_require_commands: ''
+download_url: https://github.com/cli/cli/releases/download/v{version}/gh_{version}_{os}_{arch}.{ext}
+gpg_enabled: false
+install_map_enabled: false
+package_enabled: false
+plugin_author: Kamontat Chantrachirathumrong
+plugin_name: asdf-gh
+plugin_org: kc-workspace
+plugin_repo: https://github.com/kc-workspace/asdf-gh.git
+source_enabled: false
+sys_arch_enabled: true
+sys_arch_yaml:
     aarch64*: arm64
     armv5*: armv5
     armv6*: armv6
@@ -41,22 +53,14 @@ custom_arch_yaml:
     ppc64le: ppc64le
     x86: '386'
     x86_64: amd64
-custom_bin_paths: bin
-custom_non_stable_version: (-src|-dev|-latest|-stm|[-\.]rc|-alpha|-beta|[-\.]pre|-next|snapshot|master)
-custom_os_enabled: true
-custom_os_yaml:
+sys_ext_default: tar.gz
+sys_ext_enabled: true
+sys_ext_yaml:
+    macOS-*: zip
+sys_os_enabled: true
+sys_os_yaml:
     darwin: macOS
     linux: linux
-custom_require_commands: ''
-download_url: https://github.com/cli/cli/releases/download/v{version}/gh_{version}_{os}_{arch}.$(download_extension)
-gpg_enabled: false
-install_map_enabled: false
-package_enabled: false
-plugin_author: Kamontat Chantrachirathumrong
-plugin_name: asdf-gh
-plugin_org: kc-workspace
-plugin_repo: https://github.com/kc-workspace/asdf-gh.git
-source_enabled: false
 test_cmd_args: --version
 version_file_enabled: false
 version_prefix: v

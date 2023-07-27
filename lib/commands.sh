@@ -26,7 +26,7 @@ kc_asdf_debug "$ns" "starting %s with [%s]" \
 if command -v kc_asdf_main >/dev/null; then
   kc_asdf_debug "$ns" "use main function instead" \
     "$KC_ASDF_PLUGIN_ENTRY_NAME"
-  kc_asdf_main "$@"
+  kc_asdf_main "${KC_ASDF_PLUGIN_ENTRY_NAME}.bin" "$@"
 else
   if command -v __asdf_bin >/dev/null; then
     __asdf_bin "${KC_ASDF_PLUGIN_ENTRY_NAME}.bin" "$@"

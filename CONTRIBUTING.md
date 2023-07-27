@@ -23,9 +23,12 @@ Thank you for investing your time in contributing to our project!
 ## -----------------------
 ## Customization functions
 
-kc_asdf_main() {
-  return 0
-}
+# kc_asdf_main() {
+#   local ns="$1"
+#   shift
+#
+#   return 0
+# }
 
 ## -----------------------
 
@@ -57,6 +60,7 @@ This listed custom function that can defined on any bin/* scripts.
 ```bash
 ## Example code of kc_asdf_main function
 kc_asdf_main() {
+  local ns="$1"
   return 0
 }
 ```
@@ -84,7 +88,16 @@ _kc_asdf_custom_arch() {
 }
 ```
 
-3. To custom environment variables, use `_kc_asdf_custom_env()`
+3. To custom download extension, use `_kc_asdf_custom_ext()`
+
+```bash
+_kc_asdf_custom_ext() {
+  local ext="$1"
+  printf "%s" "$ext"
+}
+```
+
+4. To custom environment variables, use `_kc_asdf_custom_env()`
 
 ```bash
 ## If this return error, it will only log warning message
@@ -96,7 +109,7 @@ _kc_asdf_custom_env() {
 }
 ```
 
-4. To custom enable-disable features, use `_kc_asdf_custom_enabled_features()`
+5. To custom enable-disable features, use `_kc_asdf_custom_enabled_features()`
 
 ```bash
 ## If this return error, mean that feature is disabled
@@ -104,6 +117,17 @@ _kc_asdf_custom_enabled_features() {
   ## feature name: checksum, gpg
   local feature="$1"
   return 0
+}
+```
+
+1. To custom how applications list version, use `_kc_asdf_custom_tags()`
+
+```bash
+## Each version should separated by newline
+_kc_asdf_custom_tags() {
+  echo 'v1.1.1'
+  echo 'v1.1.2'
+  echo 'v1.1.3'
 }
 ```
 
@@ -177,7 +201,27 @@ _kc_asdf_custom_gpg_filepath() {
 }
 ```
 
-5. To support custom source URL, use `_kc_asdf_custom_source_url()`
+5. To support custom setup before run gpg, use `_kc_asdf_custom_gpg_setup()`
+
+```bash
+## If this function return error
+## we will assume gpg failed
+_kc_asdf_custom_gpg_setup() {
+  local filepath="$1"
+  return 0
+}
+```
+
+6. To support custom signature path, use `_kc_asdf_custom_gpg_sigpath()`
+
+```bash
+_kc_asdf_custom_gpg_sigpath() {
+  local dirpath="$1" filename="$2"
+  printf "%s/%s" "$dirpath" "custom.sig"
+}
+```
+
+7. To support custom source URL, use `_kc_asdf_custom_source_url()`
 
 ```bash
 ## printf empty string will indicate there are a problem
@@ -187,7 +231,7 @@ _kc_asdf_custom_source_url() {
 }
 ```
 
-6. To support download source code, use `_kc_asdf_custom_download_source()`
+8. To support download source code, use `_kc_asdf_custom_download_source()`
 
 ```bash
 ## This will required _kc_asdf_install_source to defined too
@@ -198,7 +242,7 @@ _kc_asdf_custom_download_source() {
 }
 ```
 
-7. To support action after downloaded, use `_kc_asdf_custom_post_download()`
+9. To support action after downloaded, use `_kc_asdf_custom_post_download()`
 
 ```bash
 ## type can be either 'version' or 'ref'

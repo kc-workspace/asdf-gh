@@ -26,8 +26,9 @@ __asdf_bin() {
   local tmpdir tmpfile tmppath
   tmpdir="$(kc_asdf_temp_dir)"
   local vars=("version=$version")
-  [ -n "${KC_ASDF_OS:-}" ] && vars+=("os=${KC_ASDF_OS:-}")
-  [ -n "${KC_ASDF_ARCH:-}" ] && vars+=("arch=${KC_ASDF_ARCH:-}")
+  [ -n "${KC_ASDF_OS:-}" ] && vars+=("os=$KC_ASDF_OS")
+  [ -n "${KC_ASDF_ARCH:-}" ] && vars+=("arch=$KC_ASDF_ARCH")
+  [ -n "${KC_ASDF_EXT:-}" ] && vars+=("ext=$KC_ASDF_EXT")
   if command -v kc_asdf_version_parser >/dev/null; then
     local major minor patch
     read -r major minor patch <<<"$(kc_asdf_version_parser "$version")"
@@ -54,7 +55,7 @@ __asdf_bin() {
     kc_asdf_error "$ns" "reference mode is not support by current plugin"
     return 1
   elif kc_asdf_is_ver; then
-    url="https://github.com/cli/cli/releases/download/v{version}/gh_{version}_{os}_{arch}.$(download_extension)"
+    url="https://github.com/cli/cli/releases/download/v{version}/gh_{version}_{os}_{arch}.{ext}"
     url="$(kc_asdf_template "$url" "${vars[@]}")"
     command -v _kc_asdf_custom_download_url >/dev/null &&
       kc_asdf_debug "$ns" "developer custom download link" &&
@@ -102,8 +103,8 @@ __asdf_bin() {
       internal_path="gh_{version}_{os}_{arch}"
       [ -n "$internal_path" ] &&
         internal_path="$(kc_asdf_template "$internal_path" "${vars[@]}")"
-      kc_asdf_debug "$ns" "extracting '%s' to '%s'" \
-        "$tmppath" "$outpath"
+      kc_asdf_debug "$ns" "extracting '%s' to '%s' (%s)" \
+        "$tmppath" "$outpath" "$internal_path"
       kc_asdf_step "extract" "$outpath" \
         kc_asdf_archive_extract "$tmppath" "$outpath" "$internal_path" ||
         return 1
