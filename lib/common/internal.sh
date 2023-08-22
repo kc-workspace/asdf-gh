@@ -28,22 +28,6 @@ __asdf_load() {
   return "$code"
 }
 
-## The will exit with error if requirement isn't meet
-## e.g. `__asdf_requirement`
-__asdf_requirement() {
-  local ns="require.internal"
-  [ -n "${ASDF_NO_CHECK:-}" ] &&
-    kc_asdf_debug "$ns" "\$ASDF_NO_CHECK exist, skipped checking requirement" &&
-    return 0
-
-  for cmd in "$@"; do
-    if ! command -v "$cmd" >/dev/null; then
-      kc_asdf_error "$ns" "missing required command: '%s'" "$cmd"
-      exit 1
-    fi
-  done
-}
-
 ## Print log to stderr
 ## usage: `kc_asdf_log '<level>' '<namespace>' '<format>' '<variables>'`
 ## variables:

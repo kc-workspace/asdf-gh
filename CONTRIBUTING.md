@@ -254,6 +254,15 @@ _kc_asdf_custom_post_download() {
 }
 ```
 
+10. To support custom download source code, use `_kc_asdf_custom_source_download()`
+
+```bash
+## If you set source mode to custom, this is required
+_kc_asdf_custom_source_download() {
+  local version="$1" output="$2"
+}
+```
+
 ## Install callback
 
 1. To support custom build source code, use `_kc_asdf_custom_source_build()`

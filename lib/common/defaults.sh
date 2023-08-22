@@ -97,6 +97,23 @@ kc_asdf_load_addon() {
   fi
 }
 
+## Calling bin from another bin
+kc_asdf_call_bin() {
+  local ns="call-bin.defaults"
+  local name="$1"
+  shift
+
+  local bin="${KC_ASDF_PLUGIN_PATH:?}/bin/$name"
+  if [ -f "$bin" ]; then
+    kc_asdf_debug "$ns" "sourcing %s (%s)" \
+      "$name" "$bin"
+    bash "$bin" "$@"
+  else
+    kc_asdf_error "$ns" "file '%s' is missing" "$bin"
+    return 1
+  fi
+}
+
 ## Transfer input to output based on input mode
 ## usage: `kc_adf_transfer 'copy|move|link' '<input>' '<output>'`
 kc_asdf_transfer() {
@@ -221,4 +238,20 @@ kc_asdf_present_dir() {
   # shellcheck disable=SC2010
   [ -d "$directory" ] &&
     ls -A1q "$directory" | grep -q .
+}
+
+## Ensure input commands is available
+## e.g. `kc_asdf_commands 'echo'`
+kc_asdf_commands() {
+  local ns="require.internal"
+  [ -n "${ASDF_NO_CHECK:-}" ] &&
+    kc_asdf_debug "$ns" "\$ASDF_NO_CHECK exist, skipped checking requirement" &&
+    return 0
+
+  for cmd in "$@"; do
+    if ! command -v "$cmd" >/dev/null; then
+      kc_asdf_error "$ns" "missing required command: '%s'" "$cmd"
+      exit 1
+    fi
+  done
 }

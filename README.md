@@ -84,6 +84,7 @@ contains several extra features for every user including all below.
 - `$ASDF_FORCE_DOWNLOAD=<any-string>` to always download even cache exist
 - `$ASDF_INSECURE=<any-string>` to disable security features (e.g. checksum)
 - `$ASDF_NO_CHECK=<any-string>` to disable pre-check features (e.g. check-cmd)
+- `$ASDF_OVERRIDE_REF_REPO=<repository>` to override git repository URL when install with ref mode
 - `$ASDF_OVERRIDE_OS=<os>` to override os name
 - `$ASDF_OVERRIDE_ARCH=<arch>` to override arch name
 - `$ASDF_OVERRIDE_EXT=<ext>` to override download extension
