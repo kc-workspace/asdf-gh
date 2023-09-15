@@ -80,7 +80,7 @@ how to install & manage versions.
 Plugins generated from asdf-plugin-template repository will
 contains several extra features for every user including all below.
 
-- `$DEBUG=<any-string>` to enabled debug mode
+- `$DEBUG=<any-string>` to enabled debug mode (debug logs will guarantee to show regardless of other settings)
 - `$ASDF_FORCE_DOWNLOAD=<any-string>` to always download even cache exist
 - `$ASDF_INSECURE=<any-string>` to disable security features (e.g. checksum)
 - `$ASDF_NO_CHECK=<any-string>` to disable pre-check features (e.g. check-cmd)
@@ -97,20 +97,23 @@ contains several extra features for every user including all below.
   - **{namespace}** - for formatted namespace (always have same length)
   - **{ns}** - for raw namespace (no formatting applied)
   - **{message}** - for log message
+- `$ASDF_LOG_QUIET=<any-string>` - to disable only info logs
+- `$ASDF_LOG_SILENT=<any-string>` - to disable all logs (including warning and error)
 
 ### Addition Features
 
 The plugins might contains additional features
 in addition to default features above.
-You can take a look at [README.plugin.md][app-readme]
+You can take a look at [README.plugin.md][app-readme-md]
 
 ## Contributors
 
-Read [CONTRIBUTING.md] file for more detail.
+Read [CONTRIBUTING.md][contributing-md] file for more detail.
 
 <!-- LINKS SECTION -->
 
-[app-readme]: ./README.plugin.md
+[app-readme-md]: ./README.plugin.md
+[contributing-md]: ./CONTRIBUTING.md
 [plugin-gh]: https://github.com/kc-workspace/asdf-gh
 [template-gh]: https://github.com/kc-workspace/asdf-plugin-template
 [asdf-link]: https://github.com/asdf-vm/asdf

@@ -32,9 +32,21 @@ __asdf_load() {
 ## usage: `kc_asdf_log '<level>' '<namespace>' '<format>' '<variables>'`
 ## variables:
 ##   - ASDF_LOG_FORMAT="{datetime} [{level}] {namespace} - {message}"
+##   - ASDF_LOG_QUIET=true
+##   - ASDF_LOG_SILENT=true
 __asdf_log() {
   local level="$1" ns="$2" _format="$3"
   shift 3
+
+  case "$level" in
+  ## disable info logs if log_quiet or log_silent is set
+  "INF")
+    test -n "${ASDF_LOG_QUIET:-}" || test -n "${ASDF_LOG_SILENT:-}" &&
+      return 0
+    ;;
+  "WRN") test -n "${ASDF_LOG_SILENT:-}" && return 0 ;;
+  "ERR") test -n "${ASDF_LOG_SILENT:-}" && return 0 ;;
+  esac
 
   local default="{time} [{level}] {namespace} - {message}"
   local template="${ASDF_LOG_FORMAT:-$default}"
