@@ -50,12 +50,15 @@ kc_asdf_checksum() {
   fi
 
   local cs_algorithm="256"
-  local shasum="sha${cs_algorithm}sum"
-  command -v "$shasum" >/dev/null ||
+  local shasum="sha${cs_algorithm}sum" args=()
+  if ! command -v "$shasum" >/dev/null; then
     shasum="shasum"
+    args+=(--algorithm "$cs_algorithm")
+  fi
+  args+=(--check "$cs_txt")
 
   local tmp="$PWD"
   cd "$dirpath" &&
-    kc_asdf_exec "$shasum" --check "$cs_txt" >/dev/null &&
+    kc_asdf_exec "$shasum" "${args[@]}" >/dev/null &&
     cd "$tmp" || return 1
 }
