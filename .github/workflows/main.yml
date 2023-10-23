@@ -21,7 +21,7 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
       - name: Running cspell
-        uses: streetsidesoftware/cspell-action@v3
+        uses: streetsidesoftware/cspell-action@v4
         with:
           config: ".github/linters/cspell.json"
           # Log progress and other information during the action execution.
