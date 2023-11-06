@@ -36,7 +36,7 @@
 
 ### Miscellaneous
 
-* improve log message for readiability ([e18ee5a](https://github.com/kc-workspace/asdf-gh/commit/e18ee5ae83c8d39a8a625b8fd56ec2f04c43b1df))
+* improve log message for readability ([e18ee5a](https://github.com/kc-workspace/asdf-gh/commit/e18ee5ae83c8d39a8a625b8fd56ec2f04c43b1df))
 * update terminology ([169e371](https://github.com/kc-workspace/asdf-gh/commit/169e371dc573d727fb179a2d24fee6209d720044))
 * use asdf instead of ASDF ([702f5a0](https://github.com/kc-workspace/asdf-gh/commit/702f5a09f08d27a390a1448b79796771bc6ed9da))
 
