@@ -57,8 +57,9 @@ kc_asdf_exec() {
 ## usage: `kc_asdf_optional echo 'run'`
 kc_asdf_optional() {
   if ! command -v "$1" >/dev/null; then
-    kc_asdf_debug "optional.defaults" "command %s missing, silently ignored" \
-      "$1"
+    kc_asdf_debug "optional.defaults" \
+      "command %s missing, silently ignored" "$1"
+    return 0
   fi
 
   kc_asdf_exec "$@"

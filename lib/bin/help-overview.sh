@@ -13,6 +13,8 @@ __asdf_bin() {
     _kc_asdf_custom_help
   else
     echo "$KC_ASDF_APP_DESC"
-    echo
+
+    kc_asdf_optional kc_asdf_help_header "Commands"
+    echo "$KC_ASDF_APP_CMDS"
   fi
 }

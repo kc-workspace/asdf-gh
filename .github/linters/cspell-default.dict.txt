@@ -29,3 +29,5 @@ envops
 venv
 keyid
 kwargs
+cmd
+cmds
