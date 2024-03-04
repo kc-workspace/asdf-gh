@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.1](https://github.com/kc-workspace/asdf-gh/compare/v1.1.0...v1.1.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* **docs:** update word typo ([50fe8bd](https://github.com/kc-workspace/asdf-gh/commit/50fe8bd1bf5a1855d485931a1bbdeead27970fe3))
+
+
+### Performance Improvements
+
+* update plugin from template [autocommit] ([ef6a7fa](https://github.com/kc-workspace/asdf-gh/commit/ef6a7facbcec01507479def08e1cc27b138a2f46))
+* update plugin from template [autocommit] ([a65d096](https://github.com/kc-workspace/asdf-gh/commit/a65d096a4be53e75a79ca912d9594e3ef6d2e2eb))
+
 ## [1.1.0](https://github.com/kc-workspace/asdf-gh/compare/v1.0.0...v1.1.0) (2023-11-06)
 
 
